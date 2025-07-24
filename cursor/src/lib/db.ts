@@ -1,9 +1,14 @@
 import { Pool } from "pg";
 
+// Configure SSL for Render PostgreSQL
+const sslConfig =
+  process.env.NODE_ENV === "production"
+    ? { rejectUnauthorized: false, require: true }
+    : false;
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl:
-    process.env.DATABASE_SSL === "true" ? { rejectUnauthorized: false } : false,
+  ssl: sslConfig,
 });
 
 export interface UrlMapping {
