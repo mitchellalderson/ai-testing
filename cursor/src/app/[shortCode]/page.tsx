@@ -60,8 +60,13 @@ export default async function RedirectPage({ params }: PageProps) {
 
     // Redirect to the original URL
     redirect(urlMapping.original_url);
-  } catch (error) {
-    console.error("Error redirecting:", error);
+  } catch (error: any) {
+    // Don't log NEXT_REDIRECT errors as they are normal redirect behavior
+    if (error?.digest?.startsWith("NEXT_REDIRECT")) {
+      throw error; // Re-throw to allow the redirect to work
+    }
+
+    console.error("Database error:", error);
 
     return (
       <Box
