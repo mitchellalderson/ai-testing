@@ -19,6 +19,10 @@ export default async function RedirectPage({
 
     redirect(urlRecord.original_url);
   } catch (error) {
+    // Don't catch NEXT_REDIRECT errors - they are expected
+    if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
+      throw error;
+    }
     console.error('Error redirecting:', error);
     redirect('/404');
   }
